@@ -5,23 +5,25 @@ let array = [];
 let local; 
 
 
-const ArrayValue =  () => {
+const arrayValue =  () => {
 const userInput = input.value
 array.push(userInput)
-console.log(array)
+console.log(array, 'inne i array funksjonen')
 }
 
-const arrayToLocal = () => {
-    let local = localStorage.setItem('savedArray', JSON.stringify(array))
-    localToDisplay(local)
+const arrayToLocal = (array) => {
+    let setLocal = localStorage.setItem('savedArray', JSON.stringify(array))
+    localToDisplay(setLocal)
 }
 
-const localToDisplay = (local) => {
-    
+const localToDisplay = (setLocal) => {
+    let getLocal = JSON.parse(localStorage.getItem('savedArray')) || [];
+    console.log(getLocal, 'inne i local funksjonen')
+
 }
 
 
-button.addEventListener('click', grabValue)
+button.addEventListener('click', arrayValue)
 
 
 
