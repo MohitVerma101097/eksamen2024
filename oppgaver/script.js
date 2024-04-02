@@ -1,4 +1,4 @@
-const url = 'https://pokeapi.co/api/v2/'
+const url = 'https://pokeapi.co/api/v2/pokemon?limit=50&offset=0'
 
 const fetchUrl = async () => {
     try {
