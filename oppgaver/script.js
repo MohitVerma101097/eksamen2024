@@ -12,3 +12,14 @@ const fetchUrl = async () => {
 }
 
 fetchUrl()
+
+const responseData = async () => {
+   const pokemonData = await fetchUrl();
+   const filteredData = pokemonData.map(pokemon =>  {
+    return {
+        name: pokemon.name,
+        url: pokemon.url
+    }
+   }) 
+    
+}
