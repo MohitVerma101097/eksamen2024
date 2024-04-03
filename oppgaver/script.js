@@ -3,16 +3,14 @@ const url = 'https://pokeapi.co/api/v2/pokemon?limit=50&offset=0'
 
 const fetchUrl = async () => {
     try {
-        const request = await fetch(url)
-        const response = await request.json()
-       await responseData(response)
-       await pokemonDetails(response)
-        return response
+        const request = await fetch(url);
+        const response = await request.json();
+        const pokemonData = response.results;
+        await fetchPokemonDetails(pokemonData); // Fetch details for each Pokemon
     } catch (error) {
-        console.error(error, 'Noe gikk galt')
+        console.error(error, 'Noe gikk galt');
     }
-}
-
+};
 
 const responseData = async (response) => {
    const pokemonData = response.results; 
