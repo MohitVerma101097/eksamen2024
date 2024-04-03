@@ -6,25 +6,31 @@ const fetchUrl = async () => {
         const request = await fetch(url);
         const response = await request.json();
         const pokemonData = response.results;
-        await fetchPokemonDetails(pokemonData); // Fetch details for each Pokemon
+        await fetchPokemonDetails(pokemonData);
     } catch (error) {
         console.error(error, 'Noe gikk galt');
     }
 };
 
-const responseData = async (response) => {
-   const pokemonData = response.results; 
-   showPokemonData(pokemonData)
-}
+const fetchPokemonDetails = async (pokemonData) => {
+    try {
+        for (let i = 0; i < pokemonData.length; i++) {
+            const pokemon = pokemonData[i];
+            const pokemonResponse = await fetch(pokemon.url);
+            const pokemonDetails = await pokemonResponse.json();
+            const { name, sprites, types } = pokemonDetails;
+            const pokemonInfo = {
+                name: name,
+                image: sprites.front_default,
+                type: types[0].type.name
+            };
+            displayPokemon(pokemonInfo);
+        }
+    } catch (error) {
+        console.error('Error fetching Pokemon details:', error);
+    }
+};
 
-const pokemonDetails = async (response) => {
-
-    return {
-        pokemonName: response.name,
-        pokemonImage: response.sprites.front_default,
-        pokemonTypes: pokemonData.types[0].type.name,
-    };
-}
 
 console.log(responseData);
 
