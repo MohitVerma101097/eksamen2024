@@ -5,7 +5,8 @@ const fetchUrl = async () => {
     try {
         const request = await fetch(url)
         const response = await request.json()
-        responseData(response)
+       await responseData(response)
+       await pokemonDetails(response)
         return response
     } catch (error) {
         console.error(error, 'Noe gikk galt')
@@ -18,13 +19,26 @@ const responseData = async (response) => {
    showPokemonData(pokemonData)
 }
 
+const pokemonDetails = async (response) => {
+
+    return {
+        pokemonName: response.name,
+        pokemonImage: response.sprites.front_default,
+        pokemonTypes: pokemonData.types[0].type.name,
+    };
+}
+
+console.log(responseData);
+
 
 const showPokemonData = async (pokemonData) => {
 pokemonData.forEach((pokemon, index) => {
     const pokemonCard = document.createElement("div");
     pokemonCard.innerHTML = `<h4>Name: ${pokemon.name} </h4>
-                                <h4>test</h4>`
+                                <h4>${index}</h4>`;
+    pokemonDataContainer.appendChild(pokemonCard)
 })
 }
+
 
 fetchUrl()
