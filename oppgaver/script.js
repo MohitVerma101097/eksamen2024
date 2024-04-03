@@ -54,8 +54,6 @@ const displayPokemon = (pokemonInfo) => {
     });
 };
 
-
-
 const savePokemon = (pokemonInfo) => {
     let savedPokemon = JSON.parse(localStorage.getItem('savedPokemon')) || [];
     savedPokemon.push(pokemonInfo);
@@ -88,6 +86,14 @@ const displayLocalSorage = async (savedPokemon) => {
             deletePokemon(pokemon);
         });
     });
+}
+
+const deletePokemon = (pokemon) => {
+    let savedPokemon = JSON.parse(localStorage.getItem('savedPokemon')) || [];
+    savedPokemon = savedPokemon.filter(pokemon => pokemon.name !== pokemon.name);
+    localStorage.setItem('savedPokemon', JSON.stringify(savedPokemon));
+    displayLocalSorage(savedPokemon);
+    alert(`"${pokemon.name}" has been deleted from your Pokémon collection.`);
 }
 
 
