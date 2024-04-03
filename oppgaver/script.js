@@ -7,7 +7,7 @@ const fetchUrl = async () => {
         const response = await request.json();
         const pokemonData = response.results;
         await fetchPokemonDetails(pokemonData);
-        console.log(responseData); // Logging the fetched data
+        console.log(response); // Logging the fetched data
     } catch (error) {
         console.error(error, 'Noe gikk galt');
     }
@@ -38,6 +38,7 @@ const displayPokemon = (pokemonInfo) => {
         <h4>Name: ${pokemonInfo.name}</h4>
         <img src="${pokemonInfo.image}" alt="${pokemonInfo.name}">
         <p>Type: ${pokemonInfo.type}</p>
+        <Button>Delete</Button>
     `;
     pokemonDataContainer.appendChild(pokemonCard);
 };
