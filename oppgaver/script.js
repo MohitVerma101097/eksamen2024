@@ -71,7 +71,7 @@ const displayLocalSorage = async (savedPokemon) => {
     const localStorageContainer = document.querySelector('#localStorageContainer');
     localStorageContainer.innerHTML = ''; 
 
-    savedPokemon.forEach((pokemon) => {
+    savedPokemon.forEach((pokemon, index) => { 
         const pokemonLocalStorageCard = document.createElement('div');
         pokemonLocalStorageCard.innerHTML = `
             <h4>Name: ${pokemon.name}</h4>
@@ -83,17 +83,17 @@ const displayLocalSorage = async (savedPokemon) => {
 
         const deleteButton = pokemonLocalStorageCard.querySelector('.delete-button');
         deleteButton.addEventListener('click', () => {
-            deletePokemon(pokemon);
+            deletePokemon(savedPokemon, index); 
         });
     });
 }
 
-const deletePokemon = (pokemon) => {
-    let savedPokemon = JSON.parse(localStorage.getItem('savedPokemon')) || [];
-    savedPokemon = savedPokemon.filter(pokemon => pokemon.name !== pokemon.name);
-    localStorage.setItem('savedPokemon', JSON.stringify(savedPokemon));
-    displayLocalSorage(savedPokemon);
-    alert(`"${pokemon.name}" has been deleted from your Pokémon collection.`);
+const deletePokemon = (savedPokemon, index) => {
+    let updatedPokemon = JSON.parse(localStorage.getItem('savedPokemon')) || [];
+    updatedPokemon = updatedPokemon.filter(pokemon => pokemon.name !== savedPokemon[index].name);
+    localStorage.setItem('savedPokemon', JSON.stringify(updatedPokemon));
+    displayLocalSorage(updatedPokemon);
+    alert(`"${savedPokemon[index].name}" has been deleted from your Pokémon collection.`);
 }
 
 
