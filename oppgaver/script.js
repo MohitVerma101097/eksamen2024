@@ -1,4 +1,5 @@
 const pokemonDataContainer = document.querySelector('#pokemonDataContainer');
+const localStorageContainer = document.querySelector('#localSorage')
 const url = 'https://pokeapi.co/api/v2/pokemon?limit=50&offset=0';
 
 const fetchUrl = async () => {
@@ -57,11 +58,19 @@ const displayPokemon = (pokemonInfo) => {
 const savePokemon = (pokemonInfo) => {
     let savedPokemon = JSON.parse(localStorage.getItem('savedPokemon')) || [];
     savedPokemon.push(pokemonInfo);
-    if (savedPokemon.length > 5) {
-        alert('You can only save up to 5 Pokémon.');
+    if (savedPokemon.length > 6) {
+        alert('You can only save up to 5 Pokemon');
         return;
     }
-    localStorage.setItem('savedPokemon', JSON.stringify(savedPokemon));
+     localStorage.setItem('savedPokemon', JSON.stringify(savedPokemon));
+
     alert(`"${pokemonInfo.name}" has been saved to your Pokémon collection.`)
+    displayLocalSorage(savedPokemon)
+}
+
+const displayLocalSorage = async (savedPokemon) =>{
+    savedPokemon.foreach((pokemon)=> {
+        
+    })
 }
 fetchUrl();
