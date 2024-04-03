@@ -1,5 +1,6 @@
 const pokemonDataContainer = document.querySelector('#pokemonDataContainer');
-const localStorageContainer = document.querySelector('#localSorage')
+const localStorageContainer = document.querySelector('#localStorageContainer');
+
 const url = 'https://pokeapi.co/api/v2/pokemon?limit=50&offset=0';
 
 const fetchUrl = async () => {
@@ -68,9 +69,26 @@ const savePokemon = (pokemonInfo) => {
     displayLocalSorage(savedPokemon)
 }
 
-const displayLocalSorage = async (savedPokemon) =>{
-    savedPokemon.foreach((pokemon)=> {
-        
-    })
+const displayLocalSorage = async (savedPokemon) => {
+    const localStorageContainer = document.querySelector('#localStorageContainer');
+    localStorageContainer.innerHTML = ''; 
+
+    savedPokemon.forEach((pokemon) => {
+        const pokemonLocalStorageCard = document.createElement('div');
+        pokemonLocalStorageCard.innerHTML = `
+            <h4>Name: ${pokemon.name}</h4>
+            <p>Type: ${pokemon.type}</p>
+            <button class="delete-button">Delete from LocalStorage</button>
+        `;
+
+        localStorageContainer.appendChild(pokemonLocalStorageCard);
+
+        const deleteButton = pokemonLocalStorageCard.querySelector('.delete-button');
+        deleteButton.addEventListener('click', () => {
+            deletePokemon(pokemon);
+        });
+    });
 }
+
+
 fetchUrl();
