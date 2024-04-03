@@ -38,9 +38,19 @@ const displayPokemon = (pokemonInfo) => {
         <h4>Name: ${pokemonInfo.name}</h4>
         <img src="${pokemonInfo.image}" alt="${pokemonInfo.name}">
         <p>Type: ${pokemonInfo.type}</p>
-        <Button>Save Pokemon ${index}</Button>
+        <button class="save-button">Save Pokemon</button>
     `;
     pokemonDataContainer.appendChild(pokemonCard);
+
+    const saveButton = pokemonCard.querySelector('.save-button');
+    saveButton.addEventListener('click', () => {
+        savePokemon(pokemonInfo);
+    });
 };
 
+
+
+const savePokemon = (pokemonInfo) => {
+    
+}
 fetchUrl();
