@@ -1,5 +1,5 @@
-const pokemonDataContainer = document.querySelector('#pokemonDataContainer')
-const url = 'https://pokeapi.co/api/v2/pokemon?limit=50&offset=0'
+const pokemonDataContainer = document.querySelector('#pokemonDataContainer');
+const url = 'https://pokeapi.co/api/v2/pokemon?limit=50&offset=0';
 
 const fetchUrl = async () => {
     try {
@@ -7,6 +7,7 @@ const fetchUrl = async () => {
         const response = await request.json();
         const pokemonData = response.results;
         await fetchPokemonDetails(pokemonData);
+        console.log(responseData); // Logging the fetched data
     } catch (error) {
         console.error(error, 'Noe gikk galt');
     }
@@ -30,10 +31,6 @@ const fetchPokemonDetails = async (pokemonData) => {
         console.error('Error fetching Pokemon details:', error);
     }
 };
-
-
-console.log(responseData);
-
 
 const displayPokemon = (pokemonInfo) => {
     const pokemonCard = document.createElement('div');
