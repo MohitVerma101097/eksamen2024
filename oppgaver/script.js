@@ -8,7 +8,7 @@ const fetchUrl = async () => {
         const pokemonData = response.results;
         await fetchPokemonDetails(pokemonData);
     } catch (error) {
-        console.error(error, 'Noe gikk galt');
+        console.error(error, 'Something went worng');
     }
 };
 
@@ -42,7 +42,7 @@ const displayPokemon = (pokemonInfo) => {
     pokemonCard.style.border = '2px solid grey';
     pokemonCard.style.padding = '10px';
     pokemonCard.style.marginBottom = '20px';
-    pokemonCard.style.width = '200px'
+    pokemonCard.style.width = '100px'
 
     pokemonDataContainer.appendChild(pokemonCard);
 
@@ -55,6 +55,13 @@ const displayPokemon = (pokemonInfo) => {
 
 
 const savePokemon = (pokemonInfo) => {
-
+    let savedPokemon = JSON.parse(localStorage.getItem('savedPokemon')) || [];
+    savedPokemon.push(pokemonInfo);
+    if (savedPokemon.length > 5) {
+        alert('You can only save up to 5 Pokémon.');
+        return;
+    }
+    localStorage.setItem('savedPokemon', JSON.stringify(savedPokemon));
+    alert(`"${pokemonInfo.name}" has been saved to your Pokémon collection.`)
 }
 fetchUrl();
