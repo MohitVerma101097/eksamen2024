@@ -38,7 +38,7 @@ const displayPokemon = (pokemonInfo) => {
         <h4>Name: ${pokemonInfo.name}</h4>
         <img src="${pokemonInfo.image}" alt="${pokemonInfo.name}">
         <p>Type: ${pokemonInfo.type}</p>
-        <Button>Delete</Button>
+        <Button>Save Pokemon ${index}</Button>
     `;
     pokemonDataContainer.appendChild(pokemonCard);
 };
