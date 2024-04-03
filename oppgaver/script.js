@@ -7,7 +7,6 @@ const fetchUrl = async () => {
         const response = await request.json();
         const pokemonData = response.results;
         await fetchPokemonDetails(pokemonData);
-        console.log(response); // Logging the fetched data
     } catch (error) {
         console.error(error, 'Noe gikk galt');
     }
@@ -40,6 +39,11 @@ const displayPokemon = (pokemonInfo) => {
         <p>Type: ${pokemonInfo.type}</p>
         <button class="save-button">Save Pokemon</button>
     `;
+    pokemonCard.style.border = '2px solid grey';
+    pokemonCard.style.padding = '10px';
+    pokemonCard.style.marginBottom = '20px';
+    pokemonCard.style.width = '200px'
+
     pokemonDataContainer.appendChild(pokemonCard);
 
     const saveButton = pokemonCard.querySelector('.save-button');
@@ -51,6 +55,6 @@ const displayPokemon = (pokemonInfo) => {
 
 
 const savePokemon = (pokemonInfo) => {
-    
+
 }
 fetchUrl();
