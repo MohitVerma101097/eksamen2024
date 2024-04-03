@@ -35,14 +35,14 @@ const fetchPokemonDetails = async (pokemonData) => {
 console.log(responseData);
 
 
-const showPokemonData = async (pokemonData) => {
-pokemonData.forEach((pokemon, index) => {
-    const pokemonCard = document.createElement("div");
-    pokemonCard.innerHTML = `<h4>Name: ${pokemon.name} </h4>
-                                <h4>${index}</h4>`;
-    pokemonDataContainer.appendChild(pokemonCard)
-})
-}
+const displayPokemon = (pokemonInfo) => {
+    const pokemonCard = document.createElement('div');
+    pokemonCard.innerHTML = `
+        <h4>Name: ${pokemonInfo.name}</h4>
+        <img src="${pokemonInfo.image}" alt="${pokemonInfo.name}">
+        <p>Type: ${pokemonInfo.type}</p>
+    `;
+    pokemonDataContainer.appendChild(pokemonCard);
+};
 
-
-fetchUrl()
+fetchUrl();
