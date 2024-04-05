@@ -8,5 +8,9 @@
     padding: 10px;
     margin-bottom: 20px;
     width: 100px;
-    background-color: #fff; /* Default background color */
+    background-color: #fff;
+}
+
+#localStorageContainer {
+    margin-top: 20px;
 }
