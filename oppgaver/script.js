@@ -1,14 +1,17 @@
 const pokemonDataContainer = document.querySelector('#pokemonDataContainer');
 const localStorageContainer = document.querySelector('#localStorageContainer');
+const pokemonTypeDropdown = document.querySelector('#pokemonType');
 
 const url = 'https://pokeapi.co/api/v2/pokemon?limit=50&offset=0';
+
+let allPokemonData = [];
 
 const fetchUrl = async () => {
     try {
         const request = await fetch(url);
         const response = await request.json();
-        const pokemonData = response.results;
-        await fetchPokemonDetails(pokemonData);
+        allPokemonData = response.results;
+        await fetchPokemonDetails(allPokemonData);
     } catch (error) {
         console.error(error, 'Something went wrong');
     }
@@ -24,7 +27,7 @@ const fetchPokemonDetails = async (pokemonData) => {
             const pokemonInfo = {
                 name: name,
                 image: sprites.front_default,
-                type: types[0].type.name
+                types: types.map(type => type.type.name)
             };
             displayPokemon(pokemonInfo);
         }
@@ -38,15 +41,16 @@ const displayPokemon = (pokemonInfo) => {
     pokemonCard.innerHTML = `
         <h4>Name: ${pokemonInfo.name}</h4>
         <img src="${pokemonInfo.image}" alt="${pokemonInfo.name}">
-        <p>Type: ${pokemonInfo.type}</p>
+        <p>Type: ${pokemonInfo.types[0]}</p>
         <button class="save-button">Save Pokemon</button>
         <button class="edit-button">Edit Pokemon</button>
     `;
+    pokemonCard.classList.add('pokemon-card'); 
     pokemonCard.style.border = '2px solid grey';
     pokemonCard.style.padding = '10px';
     pokemonCard.style.marginBottom = '20px';
     pokemonCard.style.width = '100px';
-
+    pokemonCard.style.backgroundColor = getTypeColor(pokemonInfo.types[0]); 
     pokemonDataContainer.appendChild(pokemonCard);
 
     const saveButton = pokemonCard.querySelector('.save-button');
@@ -55,6 +59,32 @@ const displayPokemon = (pokemonInfo) => {
     saveButton.addEventListener('click', () => {savePokemon(pokemonInfo);});
     editButton.addEventListener('click', () => {editPokemon(pokemonInfo, pokemonCard);});
 };
+
+
+const getTypeColor = (type) => {
+    const typeColors = {
+        normal: 'Brown',
+        fire: 'Red',
+        water: 'Blue',
+        electric: 'Yellow',
+        grass: 'Green',
+        ice: 'Light Blue',
+        fighting: 'Reddish Brown',
+        poison: 'Purple',
+        ground: 'Brown',
+        flying: 'Light Blue',
+        psychic: 'Pink',
+        bug: 'Green',
+        rock: 'Gray',
+        ghost: 'Purple',
+        dragon: 'Dark Red',
+        dark: 'Black',
+        steel: 'Gray',
+        fairy: 'Pink'
+    };
+    return typeColors[type]; 
+};
+
 
 const savePokemon = (pokemonInfo) => {
     let savedPokemon = JSON.parse(localStorage.getItem('savedPokemon')) || [];
@@ -77,7 +107,7 @@ const displayLocalSorage = async (savedPokemon) => {
         const pokemonLocalStorageCard = document.createElement('div');
         pokemonLocalStorageCard.innerHTML = `
             <h4>Name: ${pokemon.name}</h4>
-            <p>Type: ${pokemon.type}</p>
+            <p>Type: ${pokemon.types.join(', ')}</p>
             <button class="delete-button">Delete from LocalStorage</button>
         `;
         localStorageContainer.appendChild(pokemonLocalStorageCard);
@@ -102,18 +132,18 @@ const editPokemon = (pokemonInfo, pokemonCard) => {
     const newType = prompt('Enter the new type for the Pokémon:');
     if (newName && newType) {
         pokemonInfo.name = newName;
-        pokemonInfo.type = newType;
+        pokemonInfo.types = [newType]; 
         let savedPokemon = JSON.parse(localStorage.getItem('savedPokemon')) || [];
         savedPokemon.forEach((pokemon) => {
-            if (pokemon.name === pokemonInfo.name && pokemon.type === pokemonInfo.type) {
+            if (pokemon.name === pokemonInfo.name) {
                 pokemon.name = newName;
-                pokemon.type = newType;
+                pokemon.types = [newType];
             }
         });
         localStorage.setItem('savedPokemon', JSON.stringify(savedPokemon));
         displayLocalSorage(savedPokemon);
         alert(`"${newName}" has been updated.`);
-        updatePokemonCard(pokemonCard, pokemonInfo); // Update the DOM with the edited Pokémon
+        updatePokemonCard(pokemonCard, pokemonInfo); 
     } else {
         alert('Invalid input. Please enter both name and type.');
     }
@@ -123,7 +153,8 @@ const updatePokemonCard = (pokemonCard, pokemonInfo) => {
     pokemonCard.querySelector('h4').textContent = `Name: ${pokemonInfo.name}`;
     pokemonCard.querySelector('img').setAttribute('src', pokemonInfo.image);
     pokemonCard.querySelector('img').setAttribute('alt', pokemonInfo.name);
-    pokemonCard.querySelector('p').textContent = `Type: ${pokemonInfo.type}`;
+    pokemonCard.querySelector('p').textContent = `Type: ${pokemonInfo.types.join(', ')}`;
 }
+
 
 fetchUrl();
