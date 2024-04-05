@@ -3,3 +3,10 @@
     flex-wrap: wrap;
     gap: 20px;
 }
+.pokemon-card {
+    border: 2px solid grey;
+    padding: 10px;
+    margin-bottom: 20px;
+    width: 100px;
+    background-color: #fff; /* Default background color */
+}
