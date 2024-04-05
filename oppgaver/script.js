@@ -65,7 +65,8 @@ const displayPokemon = (pokemonInfo) => {
 };
 
 const deletePokemonFromDisplay = (pokemonInfo, pokemonCard) => {
-    pokemonCard.remove(); 
+    pokemonCard.remove();
+    allPokemonData = allPokemonData.filter(pokemon => pokemon.name !== pokemonInfo.name);
 };
 
 const getTypeColor = (type) => {
