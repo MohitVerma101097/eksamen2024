@@ -1,6 +1,7 @@
 const pokemonDataContainer = document.querySelector('#pokemonDataContainer');
 const localStorageContainer = document.querySelector('#localStorageContainer');
 const pokemonTypeDropdown = document.querySelector('#pokemonType');
+const create = document.querySelector('#create');
 
 const url = 'https://pokeapi.co/api/v2/pokemon?limit=50&offset=0';
 
@@ -170,5 +171,21 @@ pokemonTypeDropdown.addEventListener('change', (event) => {
     });
 });
 
+const createPokemon = () => {
+    const newName = prompt('Enter the name for the new Pokémon:');
+    const newType = prompt('Enter the type for the new Pokémon:');
+    if (newName && newType) {
+        const newPokemon = {
+            name: newName,
+            types: [newType.toLowerCase()] 
+        };        
+        allPokemonData.push(newPokemon); 
+        displayPokemon(newPokemon); 
+    } else {
+        alert('Invalid input. Please enter both name and type.');
+    }
+}
+
+create.addEventListener('click', createPokemon);
 
 fetchUrl();

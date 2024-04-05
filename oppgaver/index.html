@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokémon Collection</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/oppgaver/style.css">
 </head>
 <body>
     <label for="pokemonType">Choose a Pokémon Type:</label>
     <select id="pokemonType" name="pokemonType">
+        <option value="all">All</option>
         <option value="normal">Normal</option>
         <option value="fire">Fire</option>
         <option value="water">Water</option>
@@ -28,7 +29,7 @@
         <option value="steel">Steel</option>
         <option value="fairy">Fairy</option>
     </select>
-
+    <button id="create">Creat your own!</button>
     <section id="pokemonDataContainer"></section>
     <section id="localStorageContainer"></section>
 
