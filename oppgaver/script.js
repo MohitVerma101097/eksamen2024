@@ -156,5 +156,19 @@ const updatePokemonCard = (pokemonCard, pokemonInfo) => {
     pokemonCard.querySelector('p').textContent = `Type: ${pokemonInfo.types.join(', ')}`;
 }
 
+pokemonTypeDropdown.addEventListener('change', (event) => {
+    const selectedType = event.target.value.toLowerCase();
+    const pokemonCards = document.querySelectorAll('.pokemon-card');
+
+    pokemonCards.forEach(card => {
+        const types = card.querySelector('p').textContent.toLowerCase();
+        if (selectedType === 'all' || types.includes(selectedType)) {
+            card.style.display = 'block'; 
+        } else {
+            card.style.display = 'none';
+        }
+    });
+});
+
 
 fetchUrl();
