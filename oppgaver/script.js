@@ -45,6 +45,7 @@ const displayPokemon = (pokemonInfo) => {
         <p>Type: ${pokemonInfo.types[0]}</p>
         <button class="save-button">Save Pokemon</button>
         <button class="edit-button">Edit Pokemon</button>
+        <button class="delete-button">Delete Pokemon</button>
     `;
     pokemonCard.classList.add('pokemon-card'); 
     pokemonCard.style.border = '2px solid grey';
@@ -56,11 +57,16 @@ const displayPokemon = (pokemonInfo) => {
 
     const saveButton = pokemonCard.querySelector('.save-button');
     const editButton = pokemonCard.querySelector('.edit-button');
+    const deleteButton = pokemonCard.querySelector('.delete-button');
     
     saveButton.addEventListener('click', () => {savePokemon(pokemonInfo);});
     editButton.addEventListener('click', () => {editPokemon(pokemonInfo, pokemonCard);});
+    deleteButton.addEventListener('click', () => {deletePokemonFromDisplay(pokemonInfo, pokemonCard);});
 };
 
+const deletePokemonFromDisplay = (pokemonInfo, pokemonCard) => {
+    pokemonCard.remove(); 
+};
 
 const getTypeColor = (type) => {
     const typeColors = {
