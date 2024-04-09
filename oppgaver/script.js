@@ -185,6 +185,7 @@ const createPokemon = () => {
     if (newName && newType) {
         const newPokemon = {
             name: newName,
+            image: defaultImage,
             types: [newType.toLowerCase()] 
         };        
         allPokemonData.push(newPokemon); 
@@ -193,6 +194,7 @@ const createPokemon = () => {
         alert('Invalid input. Please enter both name and type.');
     }
 }
+
 
 create.addEventListener('click', createPokemon);
 
