@@ -1,77 +1,95 @@
+// Getting references to HTML elements
 const pokemonDataContainer = document.querySelector('#pokemonDataContainer');
 const localStorageContainer = document.querySelector('#localStorageContainer');
 const pokemonTypeDropdown = document.querySelector('#pokemonType');
-const create = document.querySelector('#create');
+const createButton = document.querySelector('#create');
 
-const url = 'https://pokeapi.co/api/v2/pokemon?limit=50&offset=0';
-const defaultImage = 'https://cdn.pixabay.com/photo/2016/07/23/13/18/pokemon-1536849_1280.png'
+// URL for fetching Pokémon data
+const apiUrl = 'https://pokeapi.co/api/v2/pokemon?limit=50&offset=0';
+// Default image for Pokémon
+const defaultImage = 'https://cdn.pixabay.com/photo/2016/07/23/13/18/pokemon-1536849_1280.png';
 
+// Array to store Pokémon data
 let allPokemonData = [];
 
-const fetchUrl = async () => {
+// Function to fetch Pokémon data from the API
+const fetchApiData = async () => {
     try {
-        const request = await fetch(url);
+        // Fetching data from the API
+        const request = await fetch(apiUrl);
         const response = await request.json();
         allPokemonData = response.results;
+        // Fetching details for each Pokémon
         await fetchPokemonDetails(allPokemonData);
     } catch (error) {
-        console.error(error, 'Something went wrong');
+        console.error(error, 'Oops! Something went wrong while fetching Pokémon data.');
     }
 };
 
+// Function to fetch details for each Pokémon
 const fetchPokemonDetails = async (pokemonData) => {
     try {
+        // Looping through each Pokémon
         for (let i = 0; i < pokemonData.length; i++) {
             const pokemon = pokemonData[i];
+            // Fetching details for the current Pokémon
             const pokemonResponse = await fetch(pokemon.url);
             const pokemonDetails = await pokemonResponse.json();
+            // Extracting necessary details
             const { name, sprites, types } = pokemonDetails;
             const pokemonInfo = {
                 name: name,
                 image: sprites.front_default,
                 types: types.map(type => type.type.name)
             };
-            displayPokemon(pokemonInfo);
+            // Displaying the Pokémon card
+            displayPokemonCard(pokemonInfo);
         }
     } catch (error) {
-        console.error('Error fetching Pokemon details:', error);
+        console.error('Error fetching Pokémon details:', error);
     }
 };
 
-const displayPokemon = (pokemonInfo) => {
+// Function to display a Pokémon card
+const displayPokemonCard = (pokemonInfo) => {
+    // Creating HTML elements for the Pokémon card
     const pokemonCard = document.createElement('div');
     pokemonCard.innerHTML = `
         <h4>Name: ${pokemonInfo.name}</h4>
         <img src="${pokemonInfo.image}" alt="${pokemonInfo.name}" style="max-width: 100px; max-height: 100px;">
         <p>Type: ${pokemonInfo.types[0]}</p>
-        <button class="save-button">Save Pokemon</button>
-        <button class="edit-button">Edit Pokemon</button>
-        <button class="delete-button">Delete Pokemon</button>
+        <button class="save-button">Save Pokémon</button>
+        <button class="edit-button">Edit Pokémon</button>
+        <button class="delete-button">Delete Pokémon</button>
     `;
+    // Styling the Pokémon card
     pokemonCard.classList.add('pokemon-card'); 
     pokemonCard.style.border = '2px solid grey';
     pokemonCard.style.padding = '10px';
     pokemonCard.style.marginBottom = '20px';
     pokemonCard.style.width = '100px';
-    pokemonCard.style.backgroundColor = getTypeColor(pokemonInfo.types[0]); 
+    pokemonCard.style.backgroundColor = getPokemonTypeColor(pokemonInfo.types[0]); 
+    // Adding the Pokémon card to the container
     pokemonDataContainer.appendChild(pokemonCard);
 
+    // Adding event listeners to buttons
     const saveButton = pokemonCard.querySelector('.save-button');
     const editButton = pokemonCard.querySelector('.edit-button');
     const deleteButton = pokemonCard.querySelector('.delete-button');
     
-    saveButton.addEventListener('click', () => {savePokemon(pokemonInfo);});
-    editButton.addEventListener('click', () => {editPokemon(pokemonInfo, pokemonCard);});
-    deleteButton.addEventListener('click', () => {deletePokemonFromDisplay(pokemonInfo, pokemonCard);});
+    saveButton.addEventListener('click', () => {savePokemonData(pokemonInfo);});
+    editButton.addEventListener('click', () => {editPokemonData(pokemonInfo, pokemonCard);});
+    deleteButton.addEventListener('click', () => {deletePokemonCard(pokemonInfo, pokemonCard);});
 };
 
-
-const deletePokemonFromDisplay = (pokemonInfo, pokemonCard) => {
+// Function to delete a Pokémon card from display
+const deletePokemonCard = (pokemonInfo, pokemonCard) => {
     pokemonCard.remove();
     allPokemonData = allPokemonData.filter(pokemon => pokemon.name !== pokemonInfo.name);
 };
 
-const getTypeColor = (type) => {
+// Function to get color based on Pokémon type
+const getPokemonTypeColor = (type) => {
     const typeColors = {
         normal: 'Brown',
         fire: 'Red',
@@ -95,77 +113,82 @@ const getTypeColor = (type) => {
     return typeColors[type]; 
 };
 
-
-const savePokemon = (pokemonInfo) => {
-    let savedPokemon = JSON.parse(localStorage.getItem('savedPokemon')) || [];
-    savedPokemon.push(pokemonInfo);
-    if (savedPokemon.length > 6) {
-        alert('You can only save up to 5 Pokemon');
+// Function to save Pokémon data to local storage
+const savePokemonData = (pokemonInfo) => {
+    let savedPokemonData = JSON.parse(localStorage.getItem('savedPokemonData')) || [];
+    savedPokemonData.push(pokemonInfo);
+    if (savedPokemonData.length > 6) {
+        alert('You can only save up to 5 Pokémon.');
         return;
     }
-    localStorage.setItem('savedPokemon', JSON.stringify(savedPokemon));
+    localStorage.setItem('savedPokemonData', JSON.stringify(savedPokemonData));
 
     alert(`"${pokemonInfo.name}" has been saved to your Pokémon collection.`);
-    displayLocalSorage(savedPokemon);
-}
+    displaySavedPokemonData(savedPokemonData);
+};
 
-const displayLocalSorage = async (savedPokemon) => {
+// Function to display saved Pokémon data from local storage
+const displaySavedPokemonData = async (savedPokemonData) => {
     const localStorageContainer = document.querySelector('#localStorageContainer');
     localStorageContainer.innerHTML = ''; 
 
-    savedPokemon.forEach((pokemon, index) => { 
+    savedPokemonData.forEach((pokemon, index) => { 
         const pokemonLocalStorageCard = document.createElement('div');
         pokemonLocalStorageCard.innerHTML = `
             <h4>Name: ${pokemon.name}</h4>
             <p>Type: ${pokemon.types.join(', ')}</p>
-            <button class="delete-button">Delete from LocalStorage</button>
+            <button class="delete-button">Delete from Local Storage</button>
         `;
         localStorageContainer.appendChild(pokemonLocalStorageCard);
 
         const deleteButton = pokemonLocalStorageCard.querySelector('.delete-button');
         deleteButton.addEventListener('click', () => {
-            deletePokemon(savedPokemon, index); 
+            deleteSavedPokemonData(savedPokemonData, index); 
         });
     });
-}
+};
 
-const deletePokemon = (savedPokemon, index) => {
-    let updatedPokemon = JSON.parse(localStorage.getItem('savedPokemon')) || [];
-    updatedPokemon = updatedPokemon.filter(pokemon => pokemon.name !== savedPokemon[index].name);
-    localStorage.setItem('savedPokemon', JSON.stringify(updatedPokemon));
-    displayLocalSorage(updatedPokemon);
-    alert(`"${savedPokemon[index].name}" has been deleted from your Pokémon collection.`);
-}
+// Function to delete saved Pokémon data from local storage
+const deleteSavedPokemonData = (savedPokemonData, index) => {
+    let updatedPokemonData = JSON.parse(localStorage.getItem('savedPokemonData')) || [];
+    updatedPokemonData = updatedPokemonData.filter(pokemon => pokemon.name !== savedPokemonData[index].name);
+    localStorage.setItem('savedPokemonData', JSON.stringify(updatedPokemonData));
+    displaySavedPokemonData(updatedPokemonData);
+    alert(`"${savedPokemonData[index].name}" has been deleted from your Pokémon collection.`);
+};
 
-const editPokemon = (pokemonInfo, pokemonCard) => {
+// Function to edit Pokémon data
+const editPokemonData = (pokemonInfo, pokemonCard) => {
     const newName = prompt('Enter the new name for the Pokémon:');
     const newType = prompt('Enter the new type for the Pokémon:');
     if (newName && newType) {
         pokemonInfo.name = newName;
         pokemonInfo.types = [newType]; 
-        let savedPokemon = JSON.parse(localStorage.getItem('savedPokemon')) || [];
-        savedPokemon.forEach((pokemon) => {
+        let savedPokemonData = JSON.parse(localStorage.getItem('savedPokemonData')) || [];
+        savedPokemonData.forEach((pokemon) => {
             if (pokemon.name === pokemonInfo.name) {
                 pokemon.name = newName;
                 pokemon.types = [newType];
             }
         });
-        localStorage.setItem('savedPokemon', JSON.stringify(savedPokemon));
-        displayLocalSorage(savedPokemon);
+        localStorage.setItem('savedPokemonData', JSON.stringify(savedPokemonData));
+        displaySavedPokemonData(savedPokemonData);
         alert(`"${newName}" has been updated.`);
-        updatePokemonCard(pokemonCard, pokemonInfo); 
+        updatePokemonCardData(pokemonCard, pokemonInfo); 
     } else {
         alert('Invalid input. Please enter both name and type.');
     }
-}
+};
 
-const updatePokemonCard = (pokemonCard, pokemonInfo) => {
+// Function to update Pokémon card after editing
+const updatePokemonCardData = (pokemonCard, pokemonInfo) => {
     pokemonCard.querySelector('h4').textContent = `Name: ${pokemonInfo.name}`;
     pokemonCard.querySelector('img').setAttribute('src', pokemonInfo.image);
     pokemonCard.querySelector('img').setAttribute('alt', pokemonInfo.name);
     pokemonCard.querySelector('p').textContent = `Type: ${pokemonInfo.types.join(', ')}`;
-}
+};
 
+// Event listener for Pokémon type dropdown
 pokemonTypeDropdown.addEventListener('change', (event) => {
     const selectedType = event.target.value.toLowerCase();
     const pokemonCards = document.querySelectorAll('.pokemon-card');
@@ -180,7 +203,8 @@ pokemonTypeDropdown.addEventListener('change', (event) => {
     });
 });
 
-const createPokemon = () => {
+// Function to create a new Pokémon
+const createNewPokemon = () => {
     const newName = prompt('Enter the name for the new Pokémon:');
     const newType = prompt('Enter the type for the new Pokémon:');
     if (newName && newType) {
@@ -190,12 +214,14 @@ const createPokemon = () => {
             types: [newType.toLowerCase()] 
         };        
         allPokemonData.push(newPokemon); 
-        displayPokemon(newPokemon); 
+        displayPokemonCard(newPokemon); 
     } else {
         alert('Invalid input. Please enter both name and type.');
     }
-}
+};
 
-create.addEventListener('click', createPokemon);
+// Event listener for creating a new Pokémon
+createButton.addEventListener('click', createNewPokemon);
 
-fetchUrl();
+// Fetching Pokémon data when the page loads
+fetchApiData();
