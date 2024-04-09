@@ -42,7 +42,7 @@ const displayPokemon = (pokemonInfo) => {
     const pokemonCard = document.createElement('div');
     pokemonCard.innerHTML = `
         <h4>Name: ${pokemonInfo.name}</h4>
-        <img src="${pokemonInfo.image}" alt="${pokemonInfo.name}">
+        <img src="${pokemonInfo.image}" alt="${pokemonInfo.name}" style="max-width: 100px; max-height: 100px;">
         <p>Type: ${pokemonInfo.types[0]}</p>
         <button class="save-button">Save Pokemon</button>
         <button class="edit-button">Edit Pokemon</button>
@@ -64,6 +64,7 @@ const displayPokemon = (pokemonInfo) => {
     editButton.addEventListener('click', () => {editPokemon(pokemonInfo, pokemonCard);});
     deleteButton.addEventListener('click', () => {deletePokemonFromDisplay(pokemonInfo, pokemonCard);});
 };
+
 
 const deletePokemonFromDisplay = (pokemonInfo, pokemonCard) => {
     pokemonCard.remove();
@@ -194,7 +195,6 @@ const createPokemon = () => {
         alert('Invalid input. Please enter both name and type.');
     }
 }
-
 
 create.addEventListener('click', createPokemon);
 
