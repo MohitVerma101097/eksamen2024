@@ -221,6 +221,12 @@ const createNewPokemon = () => {
     }
 };
 
+const playGame = () => {
+    pokemonDataContainer.innerHTML = '';
+}
+
+playButton.addEventListener("click", playGame)
+
 // Event listener for creating a new Pokémon
 createButton.addEventListener('click', createNewPokemon);
 
