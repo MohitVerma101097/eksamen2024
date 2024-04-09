@@ -4,6 +4,7 @@ const pokemonTypeDropdown = document.querySelector('#pokemonType');
 const create = document.querySelector('#create');
 
 const url = 'https://pokeapi.co/api/v2/pokemon?limit=50&offset=0';
+const defaultImage = 'https://cdn.pixabay.com/photo/2016/07/23/13/18/pokemon-1536849_1280.png'
 
 let allPokemonData = [];
 
