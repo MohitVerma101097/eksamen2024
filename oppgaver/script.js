@@ -3,6 +3,7 @@ const pokemonDataContainer = document.querySelector('#pokemonDataContainer');
 const localStorageContainer = document.querySelector('#localStorageContainer');
 const pokemonTypeDropdown = document.querySelector('#pokemonType');
 const createButton = document.querySelector('#create');
+const playButton = document.querySelector('#playBtn');
 
 // URL for fetching Pokémon data
 const apiUrl = 'https://pokeapi.co/api/v2/pokemon?limit=50&offset=0';
