@@ -54,7 +54,6 @@ const fetchPokemonDetails = async (pokemonData) => {
 
 
 // Function to display a Pokémon card
-// Function to display a Pokémon card
 const displayPokemonCard = (pokemonInfo) => {
     // Extracting the HP stat value
     const hpStat = pokemonInfo.stats.find(stat => stat.name === 'hp');
@@ -92,6 +91,21 @@ const displayPokemonCard = (pokemonInfo) => {
     // Add event listener to the image for decrementing stats
     const pokemonImage = pokemonCard.querySelector('img');
     pokemonImage.addEventListener('click', () => { decrementStats(pokemonInfo, pokemonCard); });
+
+    // Add event listener to the card for decrementing HP
+    pokemonCard.addEventListener('click', () => { decrementHP(pokemonInfo, pokemonCard); });
+};
+
+// Function to decrement HP stat
+const decrementHP = (pokemonInfo, pokemonCard) => {
+    const hpStat = pokemonInfo.stats.find(stat => stat.name === 'hp');
+    hpStat.value -= 10; 
+    pokemonCard.querySelector('p').textContent = `HP: ${hpStat.value}`;
+
+    if (hpStat.value <= 0) {
+        pokemonCard.remove();
+        alert(`You have captured ${pokemonInfo.name}!`);
+    }
 };
 
 
