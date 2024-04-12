@@ -37,11 +37,12 @@ const fetchPokemonDetails = async (pokemonData) => {
             const pokemonResponse = await fetch(pokemon.url);
             const pokemonDetails = await pokemonResponse.json();
             // Extracting necessary details
-            const { name, sprites, types } = pokemonDetails;
+            const { name, sprites, types, stats } = pokemonDetails;
             const pokemonInfo = {
                 name: name,
                 image: sprites.front_default,
-                types: types.map(type => type.type.name)
+                types: types.map(type => type.type.name),
+                stats: stats.map(stat => ({ name: stat.stat.name, value: stat.base_stat }))
             };
             // Displaying the Pokémon card
             displayPokemonCard(pokemonInfo);
@@ -51,14 +52,20 @@ const fetchPokemonDetails = async (pokemonData) => {
     }
 };
 
+
+// Function to display a Pokémon card
 // Function to display a Pokémon card
 const displayPokemonCard = (pokemonInfo) => {
+    // Extracting the HP stat value
+    const hpStat = pokemonInfo.stats.find(stat => stat.name === 'hp');
+
     // Creating HTML elements for the Pokémon card
     const pokemonCard = document.createElement('div');
     pokemonCard.innerHTML = `
         <h4>Name: ${pokemonInfo.name}</h4>
         <img src="${pokemonInfo.image}" alt="${pokemonInfo.name}" style="max-width: 100px; max-height: 100px;">
         <p>Type: ${pokemonInfo.types[0]}</p>
+        <p>HP: ${hpStat.value}</p>
         <button class="save-button">Save Pokémon</button>
         <button class="edit-button">Edit Pokémon</button>
         <button class="delete-button">Delete Pokémon</button>
@@ -68,7 +75,7 @@ const displayPokemonCard = (pokemonInfo) => {
     pokemonCard.style.border = '2px solid grey';
     pokemonCard.style.padding = '10px';
     pokemonCard.style.marginBottom = '20px';
-    pokemonCard.style.width = '100px';
+    pokemonCard.style.width = '150px'; // Increased width to accommodate stats
     pokemonCard.style.backgroundColor = getPokemonTypeColor(pokemonInfo.types[0]); 
     // Adding the Pokémon card to the container
     pokemonDataContainer.appendChild(pokemonCard);
@@ -81,7 +88,13 @@ const displayPokemonCard = (pokemonInfo) => {
     saveButton.addEventListener('click', () => {savePokemonData(pokemonInfo);});
     editButton.addEventListener('click', () => {editPokemonData(pokemonInfo, pokemonCard);});
     deleteButton.addEventListener('click', () => {deletePokemonCard(pokemonInfo, pokemonCard);});
+
+    // Add event listener to the image for decrementing stats
+    const pokemonImage = pokemonCard.querySelector('img');
+    pokemonImage.addEventListener('click', () => { decrementStats(pokemonInfo, pokemonCard); });
 };
+
+
 
 // Function to delete a Pokémon card from display
 const deletePokemonCard = (pokemonInfo, pokemonCard) => {
@@ -220,12 +233,6 @@ const createNewPokemon = () => {
         alert('Invalid input. Please enter both name and type.');
     }
 };
-
-const playGame = () => {
-    pokemonDataContainer.innerHTML = '';
-}
-
-playButton.addEventListener("click", playGame)
 
 // Event listener for creating a new Pokémon
 createButton.addEventListener('click', createNewPokemon);
