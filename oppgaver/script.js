@@ -54,7 +54,6 @@ const fetchPokemonDetails = async (pokemonData) => {
 
 
 const displayPokemonCard = (pokemonInfo) => {
-    
     let hpStatValue = '10'; 
     if (pokemonInfo.stats) {
         const hpStat = pokemonInfo.stats.find(stat => stat.name === 'hp');
@@ -62,7 +61,6 @@ const displayPokemonCard = (pokemonInfo) => {
             hpStatValue = hpStat.value;
         }
     }
-
     // Creating HTML elements for the Pokémon card
     const pokemonCard = document.createElement('div');
     pokemonCard.innerHTML = `
