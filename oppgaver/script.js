@@ -53,10 +53,15 @@ const fetchPokemonDetails = async (pokemonData) => {
 };
 
 
-// Function to display a Pokémon card
 const displayPokemonCard = (pokemonInfo) => {
-    // Extracting the HP stat value
-    const hpStat = pokemonInfo.stats.find(stat => stat.name === 'hp');
+    
+    let hpStatValue = '10'; 
+    if (pokemonInfo.stats) {
+        const hpStat = pokemonInfo.stats.find(stat => stat.name === 'hp');
+        if (hpStat) {
+            hpStatValue = hpStat.value;
+        }
+    }
 
     // Creating HTML elements for the Pokémon card
     const pokemonCard = document.createElement('div');
@@ -64,7 +69,7 @@ const displayPokemonCard = (pokemonInfo) => {
         <h4>Name: ${pokemonInfo.name}</h4>
         <img src="${pokemonInfo.image}" alt="${pokemonInfo.name}" style="max-width: 100px; max-height: 100px;">
         <p>Type: ${pokemonInfo.types[0]}</p>
-        <p>HP: ${hpStat.value}</p>
+        <p>HP: ${hpStatValue}</p>
         <button class="save-button">Save Pokémon</button>
         <button class="edit-button">Edit Pokémon</button>
         <button class="delete-button">Delete Pokémon</button>
@@ -95,6 +100,7 @@ const displayPokemonCard = (pokemonInfo) => {
     // Add event listener to the card for decrementing HP
     pokemonCard.addEventListener('click', () => { decrementHP(pokemonInfo, pokemonCard); });
 };
+
 
 // Function to decrement HP stat
 const decrementHP = (pokemonInfo, pokemonCard) => {
@@ -235,16 +241,19 @@ pokemonTypeDropdown.addEventListener('change', (event) => {
 const createNewPokemon = () => {
     const newName = prompt('Enter the name for the new Pokémon:');
     const newType = prompt('Enter the type for the new Pokémon:');
-    if (newName && newType) {
+    const hpValue = prompt('Enter the HP value for the new Pokémon:');
+    
+    if (newName && newType && hpValue) {
         const newPokemon = {
             name: newName,
             image: defaultImage,
-            types: [newType.toLowerCase()] 
+            types: [newType.toLowerCase()],
+            stats: [{ name: 'hp', value: parseInt(hpValue) }] 
         };        
         allPokemonData.push(newPokemon); 
         displayPokemonCard(newPokemon); 
     } else {
-        alert('Invalid input. Please enter both name and type.');
+        alert('Invalid input. Please enter name, type, and HP value.');
     }
 };
 
